@@ -70,4 +70,11 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <!--
+    <target name="jar">
+        <jar destfile="MathFastCalc.jar" basedir="src">
+            <zipgroupfileset dir="lib" includes="*.jar"/>
+        </jar>
+    </target>
+    -->
 </project>
