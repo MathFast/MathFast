@@ -23,8 +23,7 @@ public class Main {
         System.out.println("Using JFUtils " + JFUtils.versionCheck.version + "#" + JFUtils.versionCheck.class.hashCode());
         calculatorMain calculator = new calculatorMain();
         UIManager windowStuff = new UIManager(calculator);
-        windowStuff.initWindow();
-        windowStuff.initComponents();
+        windowStuff.initAll();
     }
     
 }
