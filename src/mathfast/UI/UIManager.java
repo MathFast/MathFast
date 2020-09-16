@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JTextField;
 import mathfast.Calculator.calculatorMain;
 import mathfast.Global.Flags;
 
@@ -53,6 +54,8 @@ public class UIManager extends JFrame{
     public void initComponents(){
         setLayout(new BorderLayout());
         add(new JLabel("Hello World!"), BorderLayout.CENTER);
+        JTextField inp = new JTextField("Type stuff here...");
+        add(inp, BorderLayout.PAGE_START);
     }
     public void initAll(){
         initWindow();
