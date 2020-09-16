@@ -10,6 +10,11 @@ package mathfast.Calculator;
  * @author joona
  */
 public class calculatorMain {
+
+    public calculatorMain() {
+        System.out.println(simpleCalculate(1, "+", 2));
+    }
+    
     public String calculate(String toCalculate) {
         return "gg";
     }

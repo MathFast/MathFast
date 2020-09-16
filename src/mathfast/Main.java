@@ -5,6 +5,7 @@
  */
 package mathfast;
 
+import mathfast.UI.UIManager;
 import mathfast.Calculator.calculatorMain;
 
 /**

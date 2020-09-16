@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mathfast;
+package mathfast.UI;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,14 +18,14 @@ public class UIManager extends JFrame{
     public UIManager() {
         System.out.println("UIManager " + this.hashCode() + " registered.");
     }
-    protected void initWindow(){
+    public void initWindow(){
         setTitle(Flags.app_name + " v." + Flags.app_ver);
         setSize(400, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         setVisible(true);
     }
-    protected void initComponents(){
+    public void initComponents(){
         add(new JLabel("Hello World!"));
     }
 }
