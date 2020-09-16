@@ -5,6 +5,8 @@
  */
 package mathfast;
 
+import mathfast.Calculator.calculatorMain;
+
 /**
  *
  * @author elias
@@ -15,6 +17,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        calculatorMain calculator = new calculatorMain();
         UIManager windowStuff = new UIManager();
         windowStuff.initWindow();
         windowStuff.initComponents();
