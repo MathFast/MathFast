@@ -7,6 +7,7 @@ package mathfast.UI;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import mathfast.Calculator.calculatorMain;
 import mathfast.Global.Flags;
 
 /**
@@ -15,7 +16,10 @@ import mathfast.Global.Flags;
  */
 public class UIManager extends JFrame{
 
-    public UIManager() {
+    private calculatorMain calculator;
+    
+    public UIManager(calculatorMain calc) {
+        this.calculator = calc;
         System.out.println("UIManager " + this.hashCode() + " registered.");
     }
     public void initWindow(){

@@ -12,7 +12,8 @@ package mathfast.Calculator;
 public class calculatorMain {
 
     public calculatorMain() {
-        System.out.println(simpleCalculate(1, "+", 2));
+        System.out.println("Calculator test on 1 + 2: " + simpleCalculate(1, "+", 2));
+        System.out.println("Calculator " + this.hashCode() + " registered.");
     }
     
     public String calculate(String toCalculate) {

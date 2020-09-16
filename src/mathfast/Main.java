@@ -19,7 +19,7 @@ public class Main {
      */
     public static void main(String[] args) {
         calculatorMain calculator = new calculatorMain();
-        UIManager windowStuff = new UIManager();
+        UIManager windowStuff = new UIManager(calculator);
         windowStuff.initWindow();
         windowStuff.initComponents();
     }
