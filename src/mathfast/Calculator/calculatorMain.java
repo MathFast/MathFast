@@ -27,6 +27,23 @@ public class calculatorMain {
             case "-":
                 result = x - y;
                 break;
+                
+            case "/":
+                result = x/y;
+                break;
+                
+            case ":":
+                result = x/y;
+                break;
+                
+            case "*":
+                result = x*y;
+                break;
+            
+            case "⋅":
+                result = x*y;
+                break;
+            
             default:
                 throw new Error("Invalid operator \"" + operator + "\"");
         }
