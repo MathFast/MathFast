@@ -15,16 +15,34 @@ import mathfast.Calculator.types.mathPiece;
 public class calculatorMain {
 
     public calculatorMain() {
-        System.out.println("Calculator test on 1 + 2: " + simpleCalculate(1, "+", 2));
+        String test = "1=1";
+        System.out.println("Calculator test on " + test + ": " + calculate(test));
         System.out.println("Calculator " + this.hashCode() + " registered.");
     }
+    
+    //Basic parsing, HAS to be replaced later
     public LinkedList<mathPiece> parse(String toParse){
-        return new LinkedList<>();
+        LinkedList<mathPiece> out = new LinkedList<>();
+        for( char c : toParse.replace(" ", "").toCharArray() ){
+            System.out.println(c);
+            try{
+                int val = (int) Float.parseFloat(c + "");
+                out.add(new mathPiece(val+"", val));
+            }
+            catch(NumberFormatException e){
+                out.add(new mathPiece(c+"", 0));
+            }
+        }
+        return out;
     }
     public String calculate(String toCalculate) {
-        return "gg";
+        LinkedList<mathPiece> parsed = parse(toCalculate);
+        int x = parsed.get(0).value_int;
+        String op = parsed.get(1).value;
+        int y = parsed.get(2).value_int;
+        return simpleCalculate(x, op, y) + "";
     }
-    public int simpleCalculate(int x, String operator, int y){
+    public int simpleCalculate(int x, String operator, int y) throws NumberFormatException{
         int result;
         switch(operator){
             case "+":
@@ -51,7 +69,7 @@ public class calculatorMain {
                 break;
             
             default:
-                throw new Error("Invalid operator \"" + operator + "\"");
+                throw new NumberFormatException("Invalid operator \"" + operator + "\"");
         }
         return result;
     }
