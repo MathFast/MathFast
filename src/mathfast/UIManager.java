@@ -20,7 +20,7 @@ public class UIManager extends JFrame{
     }
     protected void initWindow(){
         setTitle(Flags.app_name + " v." + Flags.app_ver);
-        setSize(500, 500);
+        setSize(888, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         setVisible(true);
