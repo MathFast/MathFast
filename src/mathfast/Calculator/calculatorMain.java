@@ -37,13 +37,13 @@ public class calculatorMain {
     }
     public String calculate(String toCalculate) {
         LinkedList<mathPiece> parsed = parse(toCalculate);
-        int x = parsed.get(0).value_int;
+        double x = parsed.get(0).value_double;
         String op = parsed.get(1).value;
-        int y = parsed.get(2).value_int;
+        double y = parsed.get(2).value_double;
         return simpleCalculate(x, op, y) + "";
     }
-    public int simpleCalculate(int x, String operator, int y) throws NumberFormatException{
-        int result;
+    public double simpleCalculate(double x, String operator, double y) throws NumberFormatException{
+        double result;
         switch(operator){
             case "+":
                 result = x + y;

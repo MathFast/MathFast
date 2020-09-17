@@ -11,11 +11,11 @@ package mathfast.Calculator.types;
  */
 public class mathPiece {
     public String value;
-    public int value_int;
+    public float value_double;
 
-    public mathPiece(String value, int value_int) {
+    public mathPiece(String value, float value_int) {
         this.value = value;
-        this.value_int = value_int;
+        this.value_double = value_int;
     }
     
 }
