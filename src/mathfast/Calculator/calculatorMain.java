@@ -75,6 +75,13 @@ public class calculatorMain {
                 result = x*y;
                 break;
             
+            case "**":
+                result = Math.pow(x, y);
+                break;
+            
+            case "^":
+                result = Math.pow(x, y);
+                break;
             default:
                 throw new NumberFormatException("Invalid operator \"" + operator + "\"");
         }
