@@ -41,6 +41,10 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         
     String lastCorrect = "";
     
+    LinkedList<String> history = new LinkedList<>();
+    int placeInHistory = 0;
+    boolean historyEditable = true;
+    
     public UIManager(calculatorMain calc) {
         this.calculator = calc;
         System.out.println("UIManager " + this.hashCode() + " registered.");
@@ -124,6 +128,10 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
             result.setText(res);
             lastCorrect = res;
             result.setFont(new Font(resutBaseFont.getName(), resutBaseFont.getStyle(), 40));
+            if(historyEditable){
+                history.add(inp.getText());
+                placeInHistory++;
+            }
         } catch (Exception e) {
             System.out.println("\t" + "invalid text! error: " + e.toString());
             result.setText(lastCorrect + " (error : " + e.toString() + ")");
@@ -160,8 +168,23 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
                     result.selectAll();
                     break;
                 default:
+                    //Up arrow or (not a good idea) left arrow
+                    if (i == 38 /*|| i == 37*/){
+                        historyEditable = false;
+                        System.out.println("Going back in history.");
+                        placeInHistory--;
+                        historyOverride();
+                    }
+                    //Up arrow or (not a good idea) right arrow
+                    else if (i == 40 /*|| i == 39*/){
+                        historyEditable = false;
+                        System.out.println("Going forth in history.");
+                        placeInHistory++;
+                        historyOverride();
+                    }
                     //17 is the code for ctrl, so this enables ctrl+c and v
-                    if(i != 17){
+                    else if(i != 17){
+                        historyEditable = true;
                         //Do nada, reset font
                         result.setFont(new Font(resutBaseFont.getName(), resutBaseFont.getStyle(), resutBaseFont.getSize()));
                         inp.requestFocus();
@@ -170,7 +193,14 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
             }
         }
     }
-
+    private void historyOverride(){
+        placeInHistory = Math.min(placeInHistory, history.size()-1);
+        placeInHistory = Math.max(placeInHistory, 0);
+        historyEditable = false;
+        inp.setEditable(false);
+        inp.setText(history.get(placeInHistory));
+        inp.setEditable(true);
+    }
     @Override
     public void handleMouse(int i, int i1) {
         //Not going to use this utils function
