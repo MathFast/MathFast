@@ -30,7 +30,7 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
     private final calculatorMain calculator;
     JFUtils.Input utilsInput;
     JTextField inp = new JTextField("");
-    JLabel result = new JLabel("Result goes here!");
+    JTextField result = new JTextField("Result goes here!");
     Font resutBaseFont = result.getFont();
     
     String lastCorrect = "";
@@ -65,24 +65,40 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         setJMenuBar(menus);
     }
     public void initComponents(){
+        //Layout
+        setLayout(new BorderLayout());
+        
+        //Input field
         JPanel top = new JPanel(new BorderLayout());
         inp.setFont(new Font("TimesRoman", Font.PLAIN, 40));
-        setLayout(new BorderLayout());
         top.add(inp, BorderLayout.CENTER);
+        
+        //Result field
+        result.setEditable(false); //
+        result.setBackground(null); //this is the same as a JLabel
+        result.setBorder(null); //remove the border
         
         JPanel center = new JPanel(new BorderLayout());
         center.add(result, BorderLayout.PAGE_START);
         add(center, BorderLayout.CENTER);
         
+        //Enter-key detection
         utilsInput = new Input(new InputActivated());
         addKeyListener(utilsInput);
         inp.addKeyListener(utilsInput);
+        result.addKeyListener(utilsInput);
         utilsInput.verbodose = false;
         utilsInput.addListener(this);
         
+        //changelistener
         inp.getDocument().addDocumentListener(this);
         
+        //add inputfield
         add(top, BorderLayout.PAGE_START);
+        
+        //Set the focus to the inputfield, so the user can start typing at once
+        inp.requestFocus();
+        inp.requestFocusInWindow();
     }
     public void initAll(){
         initWindow();
@@ -101,6 +117,9 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
             System.out.println("\t" + "invalid text! error: " + e.toString());
             result.setText(lastCorrect + " (error : " + e.toString() + ")");
         }
+        repaint();
+        revalidate();
+        //pack();
     }
     @Override
     public void insertUpdate(DocumentEvent de) {
@@ -125,11 +144,15 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
                 case '\n':
                     System.out.println("Enter pressed!");
                     result.setFont(new Font(resutBaseFont.getName(), resutBaseFont.getStyle(), 40));
-                    
+                    result.requestFocusInWindow();
+                    result.requestFocus();
+                    result.selectAll();
                     break;
                 default:
                     //Do nada, reset font
                     result.setFont(new Font(resutBaseFont.getName(), resutBaseFont.getStyle(), resutBaseFont.getSize()));
+                    inp.requestFocus();
+                    inp.requestFocusInWindow();
             }
         }
     }
