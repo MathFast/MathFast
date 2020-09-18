@@ -6,6 +6,7 @@
 package mathfast.UI;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -25,7 +26,7 @@ import mathfast.Global.Flags;
 public class UIManager extends JFrame implements DocumentListener{
 
     private final calculatorMain calculator;
-    JTextField inp = new JTextField("Type stuff here...");
+    JTextField inp = new JTextField("");
     JLabel result = new JLabel("Result goes here!");
     
     String lastCorrect = "";
@@ -35,7 +36,7 @@ public class UIManager extends JFrame implements DocumentListener{
         System.out.println("UIManager " + this.hashCode() + " registered.");
     }
     public void initWindow(){
-        setTitle(Flags.app_name + " v." + Flags.app_ver);
+        setTitle(Flags.app_name + " " + Flags.app_ver);
         setSize(400, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
@@ -59,6 +60,7 @@ public class UIManager extends JFrame implements DocumentListener{
         setJMenuBar(menus);
     }
     public void initComponents(){
+        inp.setFont(new Font("TimesRoman", Font.PLAIN, 40));
         setLayout(new BorderLayout());
         JPanel center = new JPanel(new BorderLayout());
         center.add(result, BorderLayout.PAGE_START);
