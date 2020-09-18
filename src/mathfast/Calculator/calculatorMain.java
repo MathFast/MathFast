@@ -15,7 +15,7 @@ import mathfast.Calculator.types.mathPiece;
 public class calculatorMain {
 
     public calculatorMain() {
-        String test = "1+1";
+        String test = "1^1";
         System.out.println("Calculator test on " + test + ": " + calculate(test));
         System.out.println("Calculator " + this.hashCode() + " registered.");
     }
@@ -42,7 +42,7 @@ public class calculatorMain {
         }
         return out;
     }
-    public String calculate(String toCalculate) {
+    public final String calculate(String toCalculate) {
         LinkedList<mathPiece> parsed = parse(toCalculate);
         double x = parsed.get(0).value_double;
         String op = parsed.get(1).value;
