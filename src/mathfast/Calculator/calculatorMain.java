@@ -23,15 +23,22 @@ public class calculatorMain {
     //Basic parsing, HAS to be replaced later
     public LinkedList<mathPiece> parse(String toParse){
         LinkedList<mathPiece> out = new LinkedList<>();
-        for( char c : toParse.replace(" ", "").toCharArray() ){
+        int ind = 0;
+        //array and to get the length
+        char[] cArray = toParse.replace(" ", "").toCharArray();
+        for( char c : cArray ){
             System.out.println(c);
             try{
                 double val = (int) Float.parseFloat(c + "");
                 out.add(new mathPiece(val+"", val));
+                
             }
+            
             catch(NumberFormatException e){
                 out.add(new mathPiece(c+"", 0));
             }
+            ind++;
+           
         }
         return out;
     }
