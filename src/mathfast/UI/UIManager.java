@@ -9,6 +9,10 @@ import JFUtils.Input;
 import JFUtils.InputActivated;
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.LinkedList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -25,7 +29,7 @@ import mathfast.Global.Flags;
  *
  * @author elias
  */
-public class UIManager extends JFrame implements DocumentListener, JFUtils.InputListener{
+public class UIManager extends JFrame implements DocumentListener, JFUtils.InputListener, ActionListener{
 
     private final calculatorMain calculator;
     JFUtils.Input utilsInput;
@@ -33,6 +37,8 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
     JTextField result = new JTextField("Result goes here!");
     Font resutBaseFont = result.getFont();
     
+    JMenuItem i1, i2, i3, i4, i5;  
+        
     String lastCorrect = "";
     
     public UIManager(calculatorMain calc) {
@@ -51,11 +57,10 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         JMenuBar menus = new JMenuBar();
         JMenu menu=new JMenu("Menu");  
         JMenu submenu;
-        JMenuItem i1, i2, i3, i4, i5;  
         submenu=new JMenu("Sub Menu");  
           i1=new JMenuItem("Item 1");  
           i2=new JMenuItem("Item 2");  
-          i3=new JMenuItem("Item 3");  
+          i3=new JMenuItem("Info");  
           i4=new JMenuItem("Item 4");  
           i5=new JMenuItem("Item 5");  
           menu.add(i1); menu.add(i2); menu.add(i3);  
@@ -63,6 +68,9 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
           menu.add(submenu);  
         menus.add(menu);  
         setJMenuBar(menus);
+        
+        //action
+        i3.addActionListener(this);
     }
     public void initComponents(){
         //Layout
@@ -104,6 +112,9 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         initWindow();
         initComponents();
         initMenu();
+        //Ensure that everything is visible
+        repaint();
+        revalidate();
     }
     private void change(){
         System.out.println("Change: " + inp.getText());
@@ -149,10 +160,13 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
                     result.selectAll();
                     break;
                 default:
-                    //Do nada, reset font
-                    result.setFont(new Font(resutBaseFont.getName(), resutBaseFont.getStyle(), resutBaseFont.getSize()));
-                    inp.requestFocus();
-                    inp.requestFocusInWindow();
+                    //17 is the code for ctrl, so this enables ctrl+c and v
+                    if(i != 17){
+                        //Do nada, reset font
+                        result.setFont(new Font(resutBaseFont.getName(), resutBaseFont.getStyle(), resutBaseFont.getSize()));
+                        inp.requestFocus();
+                        inp.requestFocusInWindow();
+                    }
             }
         }
     }
@@ -171,6 +185,14 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
     public Input returnSource() {
         //Crappy
         return utilsInput;
+    }
+
+    //Menu buttons
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        if(ae.getSource() == i3){
+            JFUtils.quickTools.alert("Info", "Program version: " + Flags.app_ver + ", JFUtils version: " + JFUtils.versionCheck.version);
+        }
     }
 
 }
