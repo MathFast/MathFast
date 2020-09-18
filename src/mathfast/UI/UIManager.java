@@ -6,14 +6,15 @@
 package mathfast.UI;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import mathfast.Calculator.calculatorMain;
 import mathfast.Global.Flags;
 
@@ -21,10 +22,13 @@ import mathfast.Global.Flags;
  *
  * @author elias
  */
-public class UIManager extends JFrame implements ActionListener{
+public class UIManager extends JFrame implements DocumentListener{
 
     private final calculatorMain calculator;
     JTextField inp = new JTextField("Type stuff here...");
+    JLabel result = new JLabel("Result goes here!");
+    
+    String lastCorrect = "";
     
     public UIManager(calculatorMain calc) {
         this.calculator = calc;
@@ -56,8 +60,10 @@ public class UIManager extends JFrame implements ActionListener{
     }
     public void initComponents(){
         setLayout(new BorderLayout());
-        add(new JLabel("Hello World!"), BorderLayout.CENTER);
-        inp.addActionListener(this);
+        JPanel center = new JPanel(new BorderLayout());
+        center.add(result, BorderLayout.PAGE_START);
+        add(center, BorderLayout.CENTER);
+        inp.getDocument().addDocumentListener(this);
         add(inp, BorderLayout.PAGE_START);
     }
     public void initAll(){
@@ -65,10 +71,31 @@ public class UIManager extends JFrame implements ActionListener{
         initComponents();
         initMenu();
     }
+    private void change(){
+        System.out.println("Change: " + inp.getText());
+        try {
+            String res = calculator.calculate(inp.getText());
+            System.out.println("\t" + res);
+            result.setText(res);
+            lastCorrect = res;
+        } catch (Exception e) {
+            System.out.println("\t" + "invalid text! error: " + e.toString());
+            result.setText(lastCorrect + " (error : " + e.toString() + ")");
+        }
+    }
+    @Override
+    public void insertUpdate(DocumentEvent de) {
+        change();
+    }
 
     @Override
-    public void actionPerformed(ActionEvent ae) {
-        System.out.println(calculator.calculate(inp.getText()));
+    public void removeUpdate(DocumentEvent de) {
+        change();
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent de) {
+        change();
     }
 
 }
