@@ -6,6 +6,8 @@
 package mathfast.UI;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -19,9 +21,10 @@ import mathfast.Global.Flags;
  *
  * @author elias
  */
-public class UIManager extends JFrame{
+public class UIManager extends JFrame implements ActionListener{
 
-    private calculatorMain calculator;
+    private final calculatorMain calculator;
+    JTextField inp = new JTextField("Type stuff here...");
     
     public UIManager(calculatorMain calc) {
         this.calculator = calc;
@@ -54,7 +57,7 @@ public class UIManager extends JFrame{
     public void initComponents(){
         setLayout(new BorderLayout());
         add(new JLabel("Hello World!"), BorderLayout.CENTER);
-        JTextField inp = new JTextField("Type stuff here...");
+        inp.addActionListener(this);
         add(inp, BorderLayout.PAGE_START);
     }
     public void initAll(){
@@ -62,4 +65,10 @@ public class UIManager extends JFrame{
         initComponents();
         initMenu();
     }
+
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        System.out.println(calculator.calculate(inp.getText()));
+    }
+
 }

@@ -26,7 +26,7 @@ public class calculatorMain {
         for( char c : toParse.replace(" ", "").toCharArray() ){
             System.out.println(c);
             try{
-                int val = (int) Float.parseFloat(c + "");
+                double val = (int) Float.parseFloat(c + "");
                 out.add(new mathPiece(val+"", val));
             }
             catch(NumberFormatException e){

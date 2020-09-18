@@ -11,9 +11,9 @@ package mathfast.Calculator.types;
  */
 public class mathPiece {
     public String value;
-    public float value_double;
+    public double value_double;
 
-    public mathPiece(String value, float value_int) {
+    public mathPiece(String value, double value_int) {
         this.value = value;
         this.value_double = value_int;
     }
