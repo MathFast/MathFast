@@ -46,7 +46,7 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         System.out.println("UIManager " + this.hashCode() + " registered.");
     }
     public void initWindow(){
-        setTitle(Flags.app_name + " " + Flags.app_ver);
+        setTitle(Flags.app_name + " " + Flags.app_ver + " - " + Flags.app_ver_codename);
         setSize(400, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
@@ -191,7 +191,7 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
     @Override
     public void actionPerformed(ActionEvent ae) {
         if(ae.getSource() == i3){
-            JFUtils.quickTools.alert("Info", "Program version: " + Flags.app_ver + ", JFUtils version: " + JFUtils.versionCheck.version);
+            JFUtils.quickTools.alert("Info", "Program version: " + Flags.app_ver + " \"" + Flags.app_ver_codename + "\"" + ", JFUtils version: " + JFUtils.versionCheck.version);
         }
     }
 
