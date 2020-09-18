@@ -26,12 +26,13 @@ public class calculatorMain {
         int ind = 0;
         //array and to get the length
         char[] cArray = toParse.replace(" ", "").toCharArray();
-        for( char c : cArray ){
+        int cLen;
+        cLen = cArray.length;
+        for( char c : cArray){
             System.out.println(c);
             try{
                 double val = (int) Float.parseFloat(c + "");
                 out.add(new mathPiece(val+"", val));
-                
             }
             
             catch(NumberFormatException e){
