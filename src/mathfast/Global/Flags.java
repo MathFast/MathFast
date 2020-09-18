@@ -12,7 +12,7 @@ package mathfast.Global;
 public class Flags {
 
     public final static String app_name = "MathFast";
-    public final static float app_ver = 0.105F;
+    public final static float app_ver = 0.12F;
     public final static String app_ver_codename = "Indev";
     
 }
