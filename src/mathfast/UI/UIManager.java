@@ -8,15 +8,14 @@ package mathfast.UI;
 import JFUtils.Input;
 import JFUtils.InputActivated;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -40,10 +39,12 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
     JTextField inp = new JTextField("");
     JTextField result = new JTextField("Result goes here!");
     Font resutBaseFont = result.getFont();
+    JPanel historyUI = new JPanel(new FlowLayout());
     
-    JMenuItem i1, i2, i3, i4, i5;  
+    JMenuItem i1, i2, i3, i4, i5, i6;  
         
     String lastCorrect = "";
+    boolean isCorrect = true;
     
     LinkedList<String> history = new LinkedList<>();
     int placeInHistory = 0;
@@ -65,23 +66,27 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         JMenuBar menus = new JMenuBar();
         JMenu menu=new JMenu("Menu");  
         JMenu submenu;
-        submenu=new JMenu("Sub Menu");  
+        submenu=new JMenu("History");  
+          menu.add(submenu);  
           i1=new JMenuItem("Load history");  
           i2=new JMenuItem("Clear history");  
+          i6=new JMenuItem("Save history");
           i3=new JMenuItem("Info");  
           i4=new JMenuItem("Item 4");  
           i5=new JMenuItem("Item 5");  
           //menu.add(i1); menu.add(i2); 
-          menu.add(i1);
-          menu.add(i2);
+//          menu.add(i1);
+//          menu.add(i2);
           menu.add(i3);  
-          submenu.add(i4); submenu.add(i5);  
-          menu.add(submenu);  
+          submenu.add(i1); submenu.add(i2); submenu.add(i6);
         menus.add(menu);  
         setJMenuBar(menus);
         
         //action
         i3.addActionListener(this);
+        i2.addActionListener(this);
+        i1.addActionListener(this);
+        i6.addActionListener(this);
     }
     public void initComponents(){
         //Layout
@@ -106,7 +111,7 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         addKeyListener(utilsInput);
         inp.addKeyListener(utilsInput);
         result.addKeyListener(utilsInput);
-        utilsInput.verbodose = false;
+        utilsInput.verbodose = true;
         utilsInput.addListener(this);
         
         //changelistener
@@ -114,6 +119,10 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         
         //add inputfield
         add(top, BorderLayout.PAGE_START);
+        
+        //History UI
+        center.add(historyUI, BorderLayout.PAGE_END);
+        historyUI.setBackground(Color.black);
         
         //Set the focus to the inputfield, so the user can start typing at once
         inp.requestFocus();
@@ -135,18 +144,43 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
             result.setText(res);
             lastCorrect = res;
             result.setFont(new Font(resutBaseFont.getName(), resutBaseFont.getStyle(), 40));
-            if(historyEditable){
-                history.add(inp.getText());
-                placeInHistory++;
-            }
-            saveHistory();
+//            if(historyEditable){
+//                history.add(inp.getText());
+//                placeInHistory++;
+//            }
+            isCorrect = true;
         } catch (Exception e) {
             System.out.println("\t" + "invalid text! error: " + e.toString());
             result.setText(lastCorrect + " (error : " + e.toString() + ")");
+            isCorrect = false;
         }
-        repaint();
-        revalidate();
+        updateHistoryUI();
+//        repaint();
+//        revalidate();
         //pack();
+    }
+    void updateHistoryUI(){
+        historyUI.removeAll();
+        int ind = 0;
+        for(String entry : history){
+            int fg = 255;
+            int bg = 255;
+            JLabel comp = new JLabel(entry);
+            comp.setForeground(new Color(fg, fg, fg));
+            if(ind == placeInHistory){
+                fg = 0;
+                bg = 0;
+                comp.setForeground(new Color(fg, 255, fg));
+                comp.setBackground(new Color(bg, bg, bg));
+                if(!isCorrect){
+                    comp.setForeground(Color.red);
+                }
+            }
+            historyUI.add(comp);
+            ind++;
+        }
+        revalidate();
+        repaint();
     }
     public void saveHistory(){
         try {
@@ -161,7 +195,7 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
     }
     public void loadHistory(){
         try {
-            String hist = JFUtils.IO.CompressedIO.readAsString("mathfast_history.txt");
+            String hist = JFUtils.IO.CompressedIO.readAsString("mathfast_history.txt", false, false);
             for (String s : hist.split("\n")){
                 history.add(s);
             }
@@ -186,7 +220,6 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         change();
     }
 
-    
     @Override
     public void handleInput(char c, int i, boolean keyDown) {
         if(keyDown){
@@ -197,14 +230,35 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
                     result.requestFocusInWindow();
                     result.requestFocus();
                     result.selectAll();
+                    if(historyEditable){
+                        if(history.size() < 1 || !inp.getText().equals(history.getLast())){
+                            history.add(inp.getText());
+                            placeInHistory++;
+                            placeInHistory = Math.min(placeInHistory, history.size()-1);
+                        }
+                    }
+                    updateHistoryUI();
                     break;
                 default:
+                    //delete
+                    if (i == 127){
+                        System.out.println("User requested entry deletion.");
+                        try{
+                            history.remove(placeInHistory);
+                            placeInHistory--;
+                            placeInHistory = Math.max(placeInHistory, 0);
+                            updateHistoryUI();
+                        }catch(Exception e){
+                            System.out.println("Couldn't delete history at index " + placeInHistory + ", error: " + e);
+                        }
+                    }
                     //Up arrow or (not a good idea) left arrow
-                    if (i == 38 /*|| i == 37*/){
+                    else if (i == 38 /*|| i == 37*/){
                         historyEditable = false;
                         System.out.println("Going back in history.");
                         placeInHistory--;
                         historyOverride();
+                        updateHistoryUI();
                     }
                     //Up arrow or (not a good idea) right arrow
                     else if (i == 40 /*|| i == 39*/){
@@ -212,9 +266,18 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
                         System.out.println("Going forth in history.");
                         placeInHistory++;
                         historyOverride();
+                        updateHistoryUI();
+                    }
+                    //left arrow
+                    else if (i == 37){
+                        //Do nothing
+                    }
+                    //right arrow
+                    else if (i == 39){
+                        //Do nothing
                     }
                     //17 is the code for ctrl, so this enables ctrl+c and v
-                    else if(i != 17){
+                    else if(i != 17 && !(utilsInput.isControlDown && i == 67) && i!=10){
                         historyEditable = true;
                         //Do nada, reset font
                         result.setFont(new Font(resutBaseFont.getName(), resutBaseFont.getStyle(), resutBaseFont.getSize()));
@@ -256,6 +319,20 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         }
         if(ae.getSource() == i2){
             history = new LinkedList<>();
+            placeInHistory = 0;
+            updateHistoryUI();
+        }
+        if(ae.getSource() == i1){
+            history = new LinkedList<>();
+            loadHistory();
+            placeInHistory = 999999999;
+            placeInHistory = Math.min(placeInHistory, history.size()-1);
+            placeInHistory = Math.max(placeInHistory, 0);
+            updateHistoryUI();
+        }
+        if(ae.getSource() == i6){
+            saveHistory();
+            updateHistoryUI();
         }
     }
 
