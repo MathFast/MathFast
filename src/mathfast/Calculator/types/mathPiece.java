@@ -17,5 +17,10 @@ public class mathPiece {
         this.value = value;
         this.value_double = value_int;
     }
+
+    @Override
+    public String toString() {
+        return "mp|" +value + ", " + value_double;
+    }
     
 }

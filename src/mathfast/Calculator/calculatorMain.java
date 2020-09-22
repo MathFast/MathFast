@@ -15,7 +15,7 @@ import mathfast.Calculator.types.mathPiece;
 public class calculatorMain {
 
     public calculatorMain() {
-        String test = "1*1";
+        String test = "10*1";
         System.out.println("Calculator test on " + test + ": " + calculate(test));
         System.out.println("Calculator " + this.hashCode() + " registered.");
     }
@@ -29,35 +29,37 @@ public class calculatorMain {
         int cLen;
         cLen = cArray.length;
         String numBuffer = "";
-        String operators = "+-/*:⋅^";
+        String operators = "+-/*:⋅^ ";
+        System.out.println("Operator test (is + an operator?): " + operators.contains("+"));
         boolean workingOnNumber=false;
+        toParse = toParse + " ";
         for( char c : cArray){
-            System.out.println(c);
             char nextChar = ' ';
-            if(numBuffer==""){
+            if("".equals(numBuffer)){
                 workingOnNumber = !operators.contains(c+"");
             }
+            numBuffer = numBuffer + c;
             if (ind != cLen - 1) {
                 nextChar = cArray[ind + 1];
             }
-            numBuffer = numBuffer + c;
-            if (operators.contains(nextChar + "") || (workingOnNumber && (!operators.contains(nextChar+"")))) {
-                numBuffer = "";
-                
-            
-            try{
-                double val = (int) Float.parseFloat(c + "");
-                out.add(new mathPiece(val+"", val));
-            }
-            
-            catch(NumberFormatException e){
-                out.add(new mathPiece(c+"", 0));
-            }
+            if (operators.contains(nextChar + "") || (!workingOnNumber && (!operators.contains(nextChar+"")))) {
+                try{
+                    double val = (int) Float.parseFloat(numBuffer + "");
+                    out.add(new mathPiece(val+"", val));
                 }
+
+                catch(NumberFormatException e){
+                    out.add(new mathPiece(numBuffer+"", 0));
+                }
+                numBuffer = "";
+            }
+//            System.out.println(c + " | " + workingOnNumber + " | " + numBuffer);
             ind++;
            
         }
-        System.out.println("out:" + out.toString());
+        for(mathPiece mp : out){
+            System.out.println(mp);
+        }
         return out;
     }
     public final String calculate(String toCalculate) {
