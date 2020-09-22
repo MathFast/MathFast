@@ -67,7 +67,8 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
           i3=new JMenuItem("Info");  
           i4=new JMenuItem("Item 4");  
           i5=new JMenuItem("Item 5");  
-          menu.add(i1); menu.add(i2); menu.add(i3);  
+          //menu.add(i1); menu.add(i2); 
+          menu.add(i3);  
           submenu.add(i4); submenu.add(i5);  
           menu.add(submenu);  
         menus.add(menu);  
