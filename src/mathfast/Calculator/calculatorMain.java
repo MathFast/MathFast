@@ -15,7 +15,7 @@ import mathfast.Calculator.types.mathPiece;
 public class calculatorMain {
 
     public calculatorMain() {
-        String test = "1*1+";
+        String test = "1*1";
         System.out.println("Calculator test on " + test + ": " + calculate(test));
         System.out.println("Calculator " + this.hashCode() + " registered.");
     }
@@ -57,6 +57,7 @@ public class calculatorMain {
             ind++;
            
         }
+        System.out.println("out:" + out.toString());
         return out;
     }
     public final String calculate(String toCalculate) {
