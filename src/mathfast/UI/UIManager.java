@@ -11,8 +11,11 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -133,6 +136,7 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
                 history.add(inp.getText());
                 placeInHistory++;
             }
+            saveHistory();
         } catch (Exception e) {
             System.out.println("\t" + "invalid text! error: " + e.toString());
             result.setText(lastCorrect + " (error : " + e.toString() + ")");
@@ -142,7 +146,15 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         //pack();
     }
     public void saveHistory(){
-        new JFUtils.IO.CompressedIO();
+        try {
+            String hist = "";
+            for (String s : history){
+                hist = hist + s + "\n";
+            }
+            JFUtils.IO.CompressedIO.writeString(hist, "mathfast_history.txt");
+        } catch (FileNotFoundException ex) {
+            JFUtils.quickTools.alert(ex.getMessage(), "Could not save config");
+        }
     }
     @Override
     public void insertUpdate(DocumentEvent de) {
