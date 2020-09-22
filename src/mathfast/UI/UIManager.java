@@ -12,6 +12,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -65,12 +66,14 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         JMenu menu=new JMenu("Menu");  
         JMenu submenu;
         submenu=new JMenu("Sub Menu");  
-          i1=new JMenuItem("First degree equation");  
-          i2=new JMenuItem("Item 2");  
+          i1=new JMenuItem("Load history");  
+          i2=new JMenuItem("Clear history");  
           i3=new JMenuItem("Info");  
           i4=new JMenuItem("Item 4");  
           i5=new JMenuItem("Item 5");  
           //menu.add(i1); menu.add(i2); 
+          menu.add(i1);
+          menu.add(i2);
           menu.add(i3);  
           submenu.add(i4); submenu.add(i5);  
           menu.add(submenu);  
@@ -156,6 +159,18 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
             JFUtils.quickTools.alert(ex.getMessage(), "Could not save config");
         }
     }
+    public void loadHistory(){
+        try {
+            String hist = JFUtils.IO.CompressedIO.readAsString("mathfast_history.txt");
+            for (String s : hist.split("\n")){
+                history.add(s);
+            }
+        } catch (FileNotFoundException ex) {
+            JFUtils.quickTools.alert(ex.getMessage(), "Could not load config");
+        } catch (IOException ex) {
+            JFUtils.quickTools.alert(ex.getMessage(), "Could not load config");
+        }
+    }
     @Override
     public void insertUpdate(DocumentEvent de) {
         change();
@@ -238,6 +253,9 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
     public void actionPerformed(ActionEvent ae) {
         if(ae.getSource() == i3){
             JFUtils.quickTools.alert("Info", "Program version: " + Flags.app_ver + " \"" + Flags.app_ver_codename + "\"" + ", JFUtils version: " + JFUtils.versionCheck.version);
+        }
+        if(ae.getSource() == i2){
+            history = new LinkedList<>();
         }
     }
 
