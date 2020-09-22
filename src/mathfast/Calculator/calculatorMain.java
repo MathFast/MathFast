@@ -15,7 +15,7 @@ import mathfast.Calculator.types.mathPiece;
 public class calculatorMain {
 
     public calculatorMain() {
-        String test = "1^1";
+        String test = "1*1+";
         System.out.println("Calculator test on " + test + ": " + calculate(test));
         System.out.println("Calculator " + this.hashCode() + " registered.");
     }
@@ -28,14 +28,23 @@ public class calculatorMain {
         char[] cArray = toParse.replace(" ", "").toCharArray();
         int cLen;
         cLen = cArray.length;
+        String numBuffer = "";
+        String operators = "+-/*:⋅^";
+        boolean workingOnNumber=false;
         for( char c : cArray){
             System.out.println(c);
-            char nextChar;
-            
+            char nextChar = ' ';
+            if(numBuffer==""){
+                workingOnNumber = !operators.contains(c+"");
+            }
             if (ind != cLen - 1) {
                 nextChar = cArray[ind + 1];
             }
-            char numBuffer;
+            numBuffer = numBuffer + c;
+            if (operators.contains(nextChar + "") || (workingOnNumber && (!operators.contains(nextChar+"")))) {
+                numBuffer = "";
+                
+            
             try{
                 double val = (int) Float.parseFloat(c + "");
                 out.add(new mathPiece(val+"", val));
@@ -44,6 +53,7 @@ public class calculatorMain {
             catch(NumberFormatException e){
                 out.add(new mathPiece(c+"", 0));
             }
+                }
             ind++;
            
         }
