@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -59,6 +60,8 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         setSize(400, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
+        ImageIcon icon = new ImageIcon("./MathFast.png");
+        setIconImage(icon.getImage());
         
         setVisible(true);
     }

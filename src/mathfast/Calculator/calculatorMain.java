@@ -33,22 +33,33 @@ public class calculatorMain {
         System.out.println("Operator test (is + an operator?): " + operators.contains("+"));
         boolean workingOnNumber=false;
         toParse = toParse + " ";
+        boolean skipNext = false;
         for( char c : cArray){
             char nextChar = ' ';
             if("".equals(numBuffer)){
                 workingOnNumber = !operators.contains(c+"");
             }
-            numBuffer = numBuffer + c;
+            if(!skipNext){
+                numBuffer = numBuffer + c;
+            }
             if (ind != cLen - 1) {
                 nextChar = cArray[ind + 1];
             }
-            if (operators.contains(nextChar + "") || (!workingOnNumber && (!operators.contains(nextChar+"")))) {
+            if(skipNext){
+                //skip
+                skipNext = false;
+            }
+            else if (operators.contains(nextChar + "") || (!workingOnNumber && (!operators.contains(nextChar+"")))) {
                 try{
                     double val = (int) Float.parseFloat(numBuffer + "");
                     out.add(new mathPiece(val+"", val));
                 }
 
                 catch(NumberFormatException e){
+                    if("*".equals(numBuffer) && nextChar =='*'){
+                        skipNext = true;
+                        numBuffer = "**";
+                    }
                     out.add(new mathPiece(numBuffer+"", 0));
                 }
                 numBuffer = "";
