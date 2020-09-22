@@ -5,6 +5,7 @@
  */
 package mathfast.Calculator;
 
+import JFUtils.Range;
 import java.util.LinkedList;
 import mathfast.Calculator.types.mathPiece;
 
@@ -75,10 +76,22 @@ public class calculatorMain {
     }
     public final String calculate(String toCalculate) {
         LinkedList<mathPiece> parsed = parse(toCalculate);
-        double x = parsed.get(0).value_double;
+        double sum = 0;
+/*        double x = parsed.get(0).value_double;
         String op = parsed.get(1).value;
         double y = parsed.get(2).value_double;
-        return simpleCalculate(x, op, y) + "";
+        return simpleCalculate(x, op, y) + "";*/
+        for(int i : new Range((int) Math.floor(parsed.size()/2.0)) ){
+            int index = i * 2;
+            double x = sum;
+            if(index == 0){
+                x = parsed.get(index).value_double;
+            }
+            String op = parsed.get(index+1).value;
+            double y = parsed.get(index+2).value_double;
+            sum = simpleCalculate(x, op, y);
+        }
+        return sum + "";
     }
     public double simpleCalculate(double x, String operator, double y) throws NumberFormatException{
         double result;
