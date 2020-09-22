@@ -30,6 +30,12 @@ public class calculatorMain {
         cLen = cArray.length;
         for( char c : cArray){
             System.out.println(c);
+            char nextChar;
+            
+            if (ind != cLen - 1) {
+                nextChar = cArray[ind + 1];
+            }
+            char numBuffer;
             try{
                 double val = (int) Float.parseFloat(c + "");
                 out.add(new mathPiece(val+"", val));
