@@ -141,6 +141,9 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         revalidate();
         //pack();
     }
+    public void saveHistory(){
+        new JFUtils.IO.CompressedIO();
+    }
     @Override
     public void insertUpdate(DocumentEvent de) {
         change();
