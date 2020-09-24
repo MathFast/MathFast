@@ -114,7 +114,7 @@ public class UIManager extends JFrame implements DocumentListener, JFUtils.Input
         addKeyListener(utilsInput);
         inp.addKeyListener(utilsInput);
         result.addKeyListener(utilsInput);
-        utilsInput.verbodose = true;
+        utilsInput.verbodose = false;
         utilsInput.addListener(this);
         
         //changelistener

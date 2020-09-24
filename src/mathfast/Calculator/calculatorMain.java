@@ -7,6 +7,8 @@ package mathfast.Calculator;
 
 import JFUtils.Range;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
+import mathfast.Calculator.types.SimpleEquation;
 import mathfast.Calculator.types.mathPiece;
 
 /**
@@ -21,6 +23,9 @@ public class calculatorMain {
         System.out.println("Calculator " + this.hashCode() + " registered.");
     }
     
+    //basic operators
+    String operators = "+-/*:⋅^ ";
+    
     //Basic parsing, HAS to be replaced later
     public LinkedList<mathPiece> parse(String toParse){
         LinkedList<mathPiece> out = new LinkedList<>();
@@ -30,7 +35,6 @@ public class calculatorMain {
         int cLen;
         cLen = cArray.length;
         String numBuffer = "";
-        String operators = "+-/*:⋅^ ";
         System.out.println("Operator test (is + an operator?): " + operators.contains("+"));
         boolean workingOnNumber=false;
         toParse = toParse + " ";
@@ -70,12 +74,47 @@ public class calculatorMain {
            
         }
         for(mathPiece mp : out){
-            System.out.println(mp);
+        //    System.out.println(mp);
+        }
+        return out;
+    }
+    public PriorityQueue<SimpleEquation> sortParsed(LinkedList<mathPiece> toSort){
+        PriorityQueue<SimpleEquation> out = new PriorityQueue<>();
+        int ind = 0;
+        for(mathPiece mp : toSort){
+            if(operators.contains(mp.value)){
+                mathPiece after = new mathPiece("", 0);
+                mathPiece before = new mathPiece("", 0);
+                if(ind < toSort.size()-2){
+                    after = toSort.get(ind+1);
+                }
+                if(ind > 0){
+                    before = toSort.get(ind-1);
+                }
+                
+                SimpleEquation eq = new SimpleEquation(before, mp, after);
+                out.add(eq);
+            }
+            ind++;
         }
         return out;
     }
     public final String calculate(String toCalculate) {
-        LinkedList<mathPiece> parsed = parse(toCalculate);
+        LinkedList<mathPiece> parsedsrc = parse(toCalculate);
+        PriorityQueue<SimpleEquation> sorted = sortParsed(parsedsrc);
+        LinkedList<mathPiece> parsed = new LinkedList<>();
+        int ind = 0;
+        while(sorted.size() > 0){
+            SimpleEquation eq = sorted.poll();
+            System.out.println("\t" + eq);
+            if(ind < 1){
+                parsed.add(eq.getX());
+            }
+            parsed.add(eq.operator);
+            parsed.add(eq.getY());
+            ind++;
+        }
+        System.out.println(parsed);
         double sum = 0;
 /*        double x = parsed.get(0).value_double;
         String op = parsed.get(1).value;
@@ -89,7 +128,9 @@ public class calculatorMain {
             }
             String op = parsed.get(index+1).value;
             double y = parsed.get(index+2).value_double;
+            System.out.println("\t" + x + op + y);
             sum = simpleCalculate(x, op, y);
+            System.out.println("\t=" + sum);
         }
         return sum + "";
     }
