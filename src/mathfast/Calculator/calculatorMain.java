@@ -18,7 +18,7 @@ import mathfast.Calculator.types.mathPiece;
 public class calculatorMain {
 
     public calculatorMain() {
-        String test = "10*1";
+        String test = "1+2*3";
         System.out.println("Calculator test on " + test + ": " + calculate(test));
         System.out.println("Calculator " + this.hashCode() + " registered.");
     }
@@ -26,7 +26,7 @@ public class calculatorMain {
     //basic operators
     String operators = "+-/*:⋅^ ";
     
-    //Basic parsing, HAS to be replaced later
+    //A bit better parsing, has to still be developed
     public LinkedList<mathPiece> parse(String toParse){
         LinkedList<mathPiece> out = new LinkedList<>();
         int ind = 0;
@@ -35,7 +35,7 @@ public class calculatorMain {
         int cLen;
         cLen = cArray.length;
         String numBuffer = "";
-        System.out.println("Operator test (is + an operator?): " + operators.contains("+"));
+        //System.out.println("Operator test (is + an operator?): " + operators.contains("+"));
         boolean workingOnNumber=false;
         toParse = toParse + " ";
         boolean skipNext = false;
@@ -81,38 +81,60 @@ public class calculatorMain {
     public PriorityQueue<SimpleEquation> sortParsed(LinkedList<mathPiece> toSort){
         PriorityQueue<SimpleEquation> out = new PriorityQueue<>();
         int ind = 0;
+        boolean first = true;
         for(mathPiece mp : toSort){
             if(operators.contains(mp.value)){
                 mathPiece after = new mathPiece("", 0);
                 mathPiece before = new mathPiece("", 0);
-                if(ind < toSort.size()-2){
+                if(ind < toSort.size()-1){
                     after = toSort.get(ind+1);
                 }
                 if(ind > 0){
                     before = toSort.get(ind-1);
                 }
-                
-                SimpleEquation eq = new SimpleEquation(before, mp, after);
+                SimpleEquation eq = new SimpleEquation(before, mp, after, first);
                 out.add(eq);
+                first = false;
             }
             ind++;
         }
         return out;
     }
     public final String calculate(String toCalculate) {
+        //toCalculate = toCalculate + "-";
         LinkedList<mathPiece> parsedsrc = parse(toCalculate);
         PriorityQueue<SimpleEquation> sorted = sortParsed(parsedsrc);
         LinkedList<mathPiece> parsed = new LinkedList<>();
         int ind = 0;
+//        SimpleEquation first = sorted.poll();
+//        parsed.add(first.getX());
+//        parsed.add(first.operator);
+//        parsed.add(first.getY());
+        //parsed.add(sorted.poll().getX());
+        boolean isFirst = true;
+        boolean isLast = false;
         while(sorted.size() > 0){
             SimpleEquation eq = sorted.poll();
+            isLast = sorted.size() < 1;
             System.out.println("\t" + eq);
-            if(ind < 1){
+            if(isFirst/*eq.wasFirst*/){
                 parsed.add(eq.getX());
+                parsed.add(eq.operator);
+                parsed.add(eq.getY());
+                System.out.println("(is first)");
             }
-            parsed.add(eq.operator);
-            parsed.add(eq.getY());
+            else if(isLast){
+                parsed.add(eq.operator);
+                parsed.add(eq.getX());
+                System.out.println("(is last)");
+            }
+            else{
+                parsed.add(eq.operator);
+                parsed.add(eq.getY());
+            }
+            isFirst = false;
             ind++;
+            printParsed(parsed);
         }
         System.out.println(parsed);
         double sum = 0;
@@ -133,6 +155,13 @@ public class calculatorMain {
             System.out.println("\t=" + sum);
         }
         return sum + "";
+    }
+    private void printParsed(LinkedList<mathPiece> parsed){
+        String out = "";
+        for(mathPiece mp : parsed){
+            out = out + mp.value;
+        }
+        System.out.println(out);
     }
     public double simpleCalculate(double x, String operator, double y) throws NumberFormatException{
         double result;

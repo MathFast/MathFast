@@ -16,11 +16,13 @@ public class SimpleEquation implements Comparable<SimpleEquation>{
     mathPiece x;
     public mathPiece operator;
     mathPiece y;
+    public boolean wasFirst = false;
 
-    public SimpleEquation(mathPiece x, mathPiece operator, mathPiece y) {
+    public SimpleEquation(mathPiece x, mathPiece operator, mathPiece y, boolean wasFirst) {
         this.x = x;
         this.operator = operator;
         this.y = y;
+        this.wasFirst = wasFirst;
     }
 
     public mathPiece getX() {
